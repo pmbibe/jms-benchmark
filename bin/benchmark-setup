@@ -29,10 +29,59 @@ export MVN="${MAVEN_HOME}/bin/mvn"
 # Install Maven
 #
 if [ ! -f "${MVN}" ] ; then
+  SETTINGS_FILE=${MAVEN_HOME}/conf/settings.xml
+
+  cp apache-maven-3.0.4-bin.tar.gz ${WORKSPACE}
   cd ${WORKSPACE}
-  wget "${MAVEN_DOWNLOAD}"
+  # wget "${MAVEN_DOWNLOAD}"
   tar -zxvf apache-maven-${MAVEN_VERSION}-bin.tar.gz
+  rm -rf $SETTINGS_FILE
+  touch $SETTINGS_FILE  
   rm -rf apache-maven-${MAVEN_VERSION}-bin.tar.gz
+    # Add mirror element to the settings.xml file
+
+  cat << EOF >> "$SETTINGS_FILE"
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <pluginGroups>
+
+  </pluginGroups>
+
+
+  <proxies>
+
+  </proxies>
+
+
+  <servers>
+
+  </servers>
+
+
+  <mirrors>
+    <mirror>
+      <id>central</id>
+      <mirrorOf>central</mirrorOf>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </mirror>
+  </mirrors>
+  
+
+  <profiles>
+
+  </profiles>
+
+
+</settings>
+
+EOF
+
 fi
 
 #
